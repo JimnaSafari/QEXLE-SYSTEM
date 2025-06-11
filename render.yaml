@@ -25,11 +25,12 @@ services:
         value: 5432
 
   # Frontend service
-  - type: static-site
+  - type: web
     name: qexle-system-frontend
+    env: node
     rootDir: frontend
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    startCommand: serve -s dist
     envVars:
       - key: VITE_API_URL
         value: https://qexle-system-backend.onrender.com/api
