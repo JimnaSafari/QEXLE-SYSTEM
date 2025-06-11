@@ -1,0 +1,39 @@
+# JavaScript files
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+
+# TypeScript files
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# CSS files
+*.css linguist-language=CSS
+*.scss linguist-language=SCSS
+
+# HTML files
+*.html linguist-language=HTML
+
+# JSON files
+*.json linguist-language=JSON
+
+# Markdown files
+*.md linguist-language=Markdown
+
+# SQL files
+*.sql linguist-language=SQL
+
+# Shell scripts
+*.sh linguist-language=Shell
+
+# Environment files
+.env linguist-language=Shell
+.env.* linguist-language=Shell
+
+# Configuration files
+*.config.js linguist-language=JavaScript
+*.config.ts linguist-language=TypeScript
+*.config.json linguist-language=JSON
+
+# Documentation
+docs/** linguist-language=Markdown
+*.txt linguist-language=Text 
