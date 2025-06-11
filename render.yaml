@@ -25,7 +25,7 @@ services:
         value: 5432
 
   # Frontend service
-  - type: static
+  - type: static-site
     name: qexle-system-frontend
     rootDir: frontend
     buildCommand: npm install && npm run build
