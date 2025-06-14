@@ -7,11 +7,19 @@ import {
   changePassword
 } from '../controllers/auth.controller.js';
 import { protect, authorize } from '../middleware/auth.middleware.js';
+import { body } from 'express-validator';
 
 const router = express.Router();
 
+// Validation middleware
+const loginValidation = [
+  body('email').isEmail().withMessage('Please include a valid email'),
+  body('password').notEmpty().withMessage('Password is required'),
+  body('role').notEmpty().withMessage('Role is required')
+];
+
 // Public routes
-router.post('/login', login);
+router.post('/login', loginValidation, login);
 
 // Protected routes
 router.post('/register', protect, authorize(['admin']), register);

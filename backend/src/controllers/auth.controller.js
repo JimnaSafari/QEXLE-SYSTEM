@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { Team } from '../models/index.js';
 import { logger } from '../utils/logger.js';
+import { validationResult } from 'express-validator';
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -57,7 +58,13 @@ export const register = async (req, res) => {
 // @access  Public
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.array()[0].msg });
+    }
+
+    const { email, password, role } = req.body;
 
     // Check for team member
     const teamMember = await Team.findOne({ where: { email } });
@@ -71,18 +78,25 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    // Check role if provided
+    if (role && role !== teamMember.role) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
     // Update last login
     await teamMember.update({ lastLogin: new Date() });
 
+    // Generate token
+    const token = generateToken(teamMember.id);
+
+    // Return response in the required format
     res.json({
-      id: teamMember.id,
-      firstName: teamMember.firstName,
-      lastName: teamMember.lastName,
-      email: teamMember.email,
-      role: teamMember.role,
-      department: teamMember.department,
-      phone: teamMember.phone,
-      token: generateToken(teamMember.id)
+      token,
+      user: {
+        id: teamMember.id,
+        email: teamMember.email,
+        name: `${teamMember.firstName} ${teamMember.lastName}`
+      }
     });
   } catch (error) {
     logger.error('Error in login:', error);
